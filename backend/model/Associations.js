@@ -8,27 +8,27 @@ import OrderItem from "./OrderItemModel.js";
 import Sequelize from "sequelize";
 
 // Relasi User & Cart
-User.hasOne(Cart);
+User.hasOne(Cart, { foreignKey: "user_id" });
 Cart.belongsTo(User, { foreignKey: "user_id" });
 
 // Relasi User & Order
-User.hasMany(Order);
+User.hasMany(Order, { foreignKey: "user_id" });
 Order.belongsTo(User, { foreignKey: "user_id" });
 
 // Relasi Category & Product
-Category.hasMany(Product);
+Category.hasMany(Product, { foreignKey: "category_id" });
 Product.belongsTo(Category, { foreignKey: "category_id" });
 
 // Relasi Cart & CartItem
-Cart.hasMany(CartItem);
+Cart.hasMany(CartItem, { foreignKey: "cart_id" });
 CartItem.belongsTo(Cart, { foreignKey: "cart_id" });
 
 // Relasi Product dengan CartItem
-Product.hasMany(CartItem);
+Product.hasMany(CartItem, { foreignKey: "product_id" });
 CartItem.belongsTo(Product, { foreignKey: "product_id" });
 
 // Relasi Order & OrderItem
-Order.hasMany(OrderItem);
+Order.hasMany(OrderItem, { foreignKey: "order_id" });
 OrderItem.belongsTo(Order, { foreignKey: "order_id" });
 
 // Relasi Product & OrderItem

@@ -9,8 +9,8 @@ dotenv.config();
 
 const app = express();
 
-await db.authenticate();
-await db.sync();
+// await db.authenticate();
+// await db.sync();
 
 app.use(express.json());
 app.use(cors({ credentials: true }));
