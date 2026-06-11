@@ -2,6 +2,16 @@ import { getOrCreateCart } from "../services/cartService.js";
 import CartItem from "../model/CartItemModel.js";
 import Product from "../model/ProductModel.js";
 
+export const getItemCart = async (req, res) => {
+  try {
+    const response = await CartItem.findAll({
+      attributes: ["id", "cart_id", "product_id", "quantity"],
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const addToCart = async (req, res) => {
   try {
     const cart = await getOrCreateCart(req.userId);
