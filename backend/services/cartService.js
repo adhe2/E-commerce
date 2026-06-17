@@ -1,4 +1,3 @@
-import { where } from "sequelize";
 import Cart from "../model/CartModel.js";
 
 export const getOrCreateCart = async (userId) => {
