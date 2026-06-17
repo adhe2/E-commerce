@@ -29,47 +29,44 @@ export const getItemCart = async (req, res) => {
 
 export const addToCart = async (req, res) => {
   try {
-    if (!req.body.quantity || req.body.quantity < 1) {
-      return res.status(400).json({
-        msg: "Quantity minimal 1",
+    if (!req.body.quantity || req.body.quantity < 1) return res.status(400).json({ msg: "Quantity minimal 1" });
+
+    const cart = await getOrCreateCart(req.userId);
+
+    const product = await Product.findByPk(req.body.productId);
+
+    if (!product) {
+      return res.status(404).json({
+        msg: "Produk tidak ditemukan",
       });
+    }
 
-      const cart = await getOrCreateCart(req.userId);
+    if (product.stock < req.body.quantity) {
+      return res.status(400).json({
+        msg: "Stok tidak mencukupi",
+      });
+    }
 
-      const product = await Product.findByPk(req.body.productId);
+    const item = await CartItem.findOne({
+      where: {
+        cart_id: cart.id,
+        product_id: req.body.productId,
+      },
+    });
 
-      if (!product) {
-        return res.status(404).json({
-          msg: "Produk tidak ditemukan",
-        });
-      }
+    if (item) {
+      const newQuantity = item.quantity + req.body.quantity;
 
-      if (product.stock < req.body.quantity) {
+      if (newQuantity > product.stock) {
         return res.status(400).json({
           msg: "Stok tidak mencukupi",
         });
       }
 
-      const item = await CartItem.findOne({
-        where: {
-          cart_id: cart.id,
-          product_id: req.body.productId,
-        },
-      });
-
-      if (item) {
-        const newQuantity = item.quantity + req.body.quantity;
-
-        if (newQuantity > product.stock) {
-          return res.status(400).json({
-            msg: "Stok tidak mencukupi",
-          });
-        }
-      }
-
       await item.update({
         quantity: item.quantity + req.body.quantity,
       });
+      res.status(200).json({ msg: "Quantity di update" });
     } else {
       await CartItem.create({
         cart_id: cart.id,
@@ -79,6 +76,7 @@ export const addToCart = async (req, res) => {
     }
     res.status(201).json({ msg: "Produk telah dimasukkan ke dalam keranjang" });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ msg: "Terjadi kesalahan pada server." });
   }
 };
