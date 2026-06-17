@@ -8,6 +8,7 @@ import session from "express-session";
 import connectSessionSequelize from "connect-session-sequelize";
 import "./model/Associations.js";
 import routerProduct from "./router/productRoute.js";
+import routerCategory from "./router/categoryRoute.js";
 
 dotenv.config();
 
@@ -44,9 +45,11 @@ app.use(
   }),
 );
 
+// Kategori router
 app.use(routerUser);
 app.use(routerLogin);
 app.use(routerProduct);
+app.use(routerCategory);
 
 app.listen(process.env.APP_PORT, () => {
   try {

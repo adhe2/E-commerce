@@ -1,11 +1,18 @@
 import Product from "../model/ProductModel.js";
 import User from "../model/UserModel.js";
 import { Op, where } from "sequelize";
+import Category from "../model/CategoryModel.js";
 
 export const getProduct = async (req, res) => {
   try {
     const response = await Product.findAll({
       attributes: ["id", "name", "description", "price", "stock", "image"],
+      include: [
+        {
+          model: Category,
+          attributes: ["id", "name"],
+        },
+      ],
     });
 
     if (!response) return res.status(404).json({ msg: "Produk tidak ditemukan" });
@@ -33,8 +40,15 @@ export const createProduct = async (req, res) => {
   try {
     const { category_id, name, description, price, stock, image } = req.body;
 
-    if (!name || !price) {
+    if (!name || price === undefined) {
       return res.status(400).json({ msg: "Name dan Price wajib di isi!" });
+    }
+
+    if (price < 0) {
+      return res.status(400).json({ msg: "Price tidak boleh negatif!" });
+    }
+    if (stock < 0) {
+      return res.status(400).json({ msg: "Price tidak boleh negatif!" });
     }
 
     await Product.create({
