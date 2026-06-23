@@ -9,9 +9,7 @@ export const getOrCreateCart = async (userId) => {
 
   if (!cart) {
     await Cart.create({
-      where: {
-        user_id: userId,
-      },
+      user_id: userId,
     });
   }
 

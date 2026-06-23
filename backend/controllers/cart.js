@@ -56,13 +56,11 @@ export const addToCart = async (req, res) => {
 
     if (item) {
       const newQuantity = item.quantity + req.body.quantity;
-
       if (newQuantity > product.stock) {
         return res.status(400).json({
           msg: "Stok tidak mencukupi",
         });
       }
-
       await item.update({
         quantity: item.quantity + req.body.quantity,
       });
@@ -74,7 +72,7 @@ export const addToCart = async (req, res) => {
         quantity: req.body.quantity,
       });
     }
-    res.status(201).json({ msg: "Produk telah dimasukkan ke dalam keranjang" });
+    return res.status(201).json({ msg: "Produk telah dimasukkan ke dalam keranjang" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Terjadi kesalahan pada server." });
