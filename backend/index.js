@@ -10,6 +10,7 @@ import "./model/Associations.js";
 import routerProduct from "./router/productRoute.js";
 import routerCategory from "./router/categoryRoute.js";
 import routerCart from "./router/cartRoute.js";
+import routerOrder from "./router/orderRoute.js";
 
 dotenv.config();
 
@@ -52,6 +53,7 @@ app.use(routerLogin);
 app.use(routerProduct);
 app.use(routerCategory);
 app.use(routerCart);
+app.use(routerOrder);
 
 app.listen(process.env.APP_PORT, () => {
   try {
